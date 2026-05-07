@@ -1,0 +1,17 @@
+{
+    "date": "26 April 2026",
+    "review_topic": "Lists",
+    "long_topics": [
+        "Lists",
+        "Variable",
+        "Forloop",
+        "Whileloop",
+        "Functions",
+        "Filehandling",
+        "Tryerror",
+        "imports",
+        "Listcomprehension",
+        "Dictionaries"
+    ],
+    "file_exists": true
+}
