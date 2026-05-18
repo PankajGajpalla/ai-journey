@@ -1,6 +1,37 @@
-agent_name,task,tokens_used,success,timestamp
-ResearchBot,Find AI papers,1200,True,2026-04-27 13:07:19
-WriterBot,Write blog post,800,True,2026-04-27 13:07:19
-ReviewBot,Review content,600,False,2026-04-27 13:07:19
-ResearchBot,Find ML papers,1100,True,2026-04-27 13:07:19
-WriterBot,Write summary,800,True,2026-04-27 13:07:19
+[
+    {
+        "agent_name": "ResearchBot",
+        "task": "Find AI papers",
+        "tokens_used": 1200,
+        "success": true,
+        "timestamp": "2026-05-17 17:46:17"
+    },
+    {
+        "agent_name": "WriterBot",
+        "task": "Write blog post",
+        "tokens_used": 800,
+        "success": true,
+        "timestamp": "2026-05-17 17:46:17"
+    },
+    {
+        "agent_name": "ReviewBot",
+        "task": "Review content",
+        "tokens_used": 600,
+        "success": false,
+        "timestamp": "2026-05-17 17:46:17"
+    },
+    {
+        "agent_name": "ResearchBot",
+        "task": "Find ML papers",
+        "tokens_used": 1100,
+        "success": true,
+        "timestamp": "2026-05-17 17:46:17"
+    },
+    {
+        "agent_name": "WriterBot",
+        "task": "Write summary",
+        "tokens_used": 800,
+        "success": true,
+        "timestamp": "2026-05-17 17:46:17"
+    }
+]
