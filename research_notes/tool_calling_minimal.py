@@ -112,5 +112,5 @@ while iteration < max_iterations:
                 "tool_call_id": tool_call.id,
                 "content": result
             })
-else:
-    print("Max iterations reached")
+    else:
+        print("Max iterations reached")

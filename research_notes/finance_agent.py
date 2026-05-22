@@ -173,7 +173,16 @@ tool_registry = {
 }
 
 def run_tool(name, args):
-    return tool_registry[name](**args)
+    if name not in tool_registry:
+        return f"Error: tool '{name}' not found"
+    
+    # remove any junk empty-key arguments the LLM might send
+    clean_args = {k: v for k, v in args.items() if k}
+    
+    try:
+        return tool_registry[name](**clean_args)
+    except Exception as e:
+        return f"Error running {name}: {e}"
 
 print("Finance Assistant ready. Type 'quit' to exit.")
 messages = [{"role": "system", "content": "You are a personal finance assistant that stores and calculate user's expense "}]
@@ -196,15 +205,18 @@ while True:                              # OUTER — conversation
         msg = response.choices[0].message
         stop_reason = response.choices[0].finish_reason
 
-        messages.append({
+        # build assistant message conditionally
+        assistant_msg = {
             "role": "assistant",
-            "content": msg.content or "",
-            "tool_calls": msg.tool_calls
-        })
+            "content": msg.content or ""
+        }
+        if msg.tool_calls:
+            assistant_msg["tool_calls"] = msg.tool_calls
+        messages.append(assistant_msg)
 
         if stop_reason == "stop":
             print(f"\nAgent: {msg.content}")
-            break                        # breaks INNER loop only → back to user input
+            break
 
         if stop_reason == "tool_calls":
             for tool_call in msg.tool_calls:
@@ -218,4 +230,3 @@ while True:                              # OUTER — conversation
                     "tool_call_id": tool_call.id,
                     "content": result
                 })
-            # inner loop repeats → LLM called again WITH tool results

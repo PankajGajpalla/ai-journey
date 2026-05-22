@@ -1,0 +1,14 @@
+[
+    {
+        "amount": 500,
+        "category": "groceries",
+        "note": "today",
+        "time_stamp": "2026-05-22"
+    },
+    {
+        "amount": 1200,
+        "category": "petrol",
+        "note": "",
+        "time_stamp": "2026-05-22"
+    }
+]
