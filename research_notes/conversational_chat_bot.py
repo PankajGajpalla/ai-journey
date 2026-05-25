@@ -28,24 +28,71 @@ def calculator(expression: str) -> str:
     except Exception as e:
         return f"error: {e}"
 
-tools = [get_weather, calculator]
+import os
+from langchain_groq import ChatGroq
+from langchain_core.tools import tool
+from langchain.agents import create_agent
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+@tool
+def calculator(expression: str) -> str:
+    """Evaluates a math expression.
+
+    Args:
+        expression: A math expression like '5 * 10'
+    """
+    try:
+        return str(eval(expression))
+    except Exception as e:
+        return f"Error: {e}"
+
+
+tools = [calculator]
 llm = ChatGroq(model="openai/gpt-oss-20b", api_key=os.getenv("GROQ_API_KEY"))
 
-checkpointer = MemorySaver()
-agent = create_agent(llm, tools, checkpointer=checkpointer)
+# Custom system prompt
+system_prompt = """You are a strict, no-nonsense math tutor named Professor Calc.
+Rules:
+- Always use the calculator tool for ANY arithmetic, never compute in your head
+- Explain each step briefly
+- Be encouraging but direct
+- End every response with a short motivational line about practice"""
 
-config = {"configurable": {"thread_id": "chat_1"}}
+agent = create_agent(llm, tools, system_prompt=system_prompt)
 
-print("Chat ready. Type 'quit' to exit.")
+result = agent.invoke({
+    "messages": [("user", "What is 347 times 89?")]
+})
+print(result["messages"][-1].content)
 
-while True:
-    user_input = input("\nYou: ")
-    if user_input == "quit":
-        break
+
+
+
+
+
+
+
+# tools = [get_weather, calculator]
+# llm = ChatGroq(model="openai/gpt-oss-20b", api_key=os.getenv("GROQ_API_KEY"))
+
+# checkpointer = MemorySaver()
+# agent = create_agent(llm, tools, checkpointer=checkpointer)
+
+# config = {"configurable": {"thread_id": "chat_1"}}
+
+# print("Chat ready. Type 'quit' to exit.")
+
+# while True:
+#     user_input = input("\nYou: ")
+#     if user_input == "quit":
+#         break
     
-    result = agent.invoke(
-        {"messages": [("user", user_input)]},
-        config
-    )
-    print("Agent:", result["messages"][-1].content)
+#     result = agent.invoke(
+#         {"messages": [("user", user_input)]},
+#         config
+#     )
+#     print("Agent:", result["messages"][-1].content)
 
