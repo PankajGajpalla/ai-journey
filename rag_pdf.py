@@ -6,11 +6,22 @@ from langchain_chroma import Chroma
 from langchain_groq import ChatGroq
 from dotenv import load_dotenv
 
+pdf_path = "newresume.pdf"
+print("Looking for:", os.path.abspath(pdf_path))
+print("Exists?", os.path.exists(pdf_path))
+
+if not os.path.exists(pdf_path):
+    print("Not found — check the path above")
+    exit()
+
+loader = PyPDFLoader(pdf_path)
+
+
 load_dotenv()
 
 # --- SETUP: load and process the PDF ---
 print("Loading PDF...")
-loader = PyPDFLoader("yourfile.pdf")   # ← change to your PDF filename
+loader = PyPDFLoader("newresume.pdf")   # ← change to your PDF filename
 pages = loader.load()
 print(f"Loaded {len(pages)} pages")
 
@@ -29,7 +40,7 @@ llm = ChatGroq(model="openai/gpt-oss-20b", api_key=os.getenv("GROQ_API_KEY"))
 
 # --- QUERY ---
 def answer_question(question):
-    relevant = vectorstore.similarity_search(question, k=3)
+    relevant = vectorstore.similarity_search(question, k=5)
     context = "\n\n".join(chunk.page_content for chunk in relevant)
     prompt = f"""Answer using ONLY the context below. If not in context, say "I don't have that information."
 
@@ -48,3 +59,5 @@ while True:
     if q == "quit":
         break
     print(f"\n{answer_question(q)}")
+
+
